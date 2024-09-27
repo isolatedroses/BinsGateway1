@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIML Course Modules (2022-2024)</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Video.js CSS -->
+    <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
+
+    <!-- Video.js JavaScript -->
+    <script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
+
+    <!-- YouTube plugin for Video.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-youtube/2.6.1/Youtube.min.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script> <!-- PapaParse for CSV parsing -->
+   
+    <script src="scripts.js"></script>
+</head>
+<body>
+
+<h1>BINS' WILP AIML Course Modules (2022-2024): V2.0</h1>
+<h5>(There are a lot of things to write, but let's keep it simple <img src="https://html-online.com/editorfiles/tiny/plugins/emoticons/img/smiley-cool.gif" alt="cool" />)</h5>
+<h1>Semesters:</h1>
+
+<div id="course-content">
+    <!-- Dynamic content will be added here -->
+</div>
+
+<!-- Modal for YouTube Video Playback using Video.js -->
+<div id="videoModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <!-- Video.js Player -->
+        <video
+            id="videoPlayer"
+            class="video-js vjs-default-skin"
+            controls
+            width="640" height="360"
+            data-setup='{}'
+        >
+        </video>
+    </div>
+</div>
+
+
+</body>
+</html>
