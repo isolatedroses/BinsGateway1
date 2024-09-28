@@ -1,7 +1,5 @@
-// Function to decode base64 encoded CSV content
 function decodeCSV(base64String) {
     try {
-        // Decode the base64 string
         const decodedData = atob(base64String);
         return decodedData;
     } catch (error) {
@@ -10,9 +8,8 @@ function decodeCSV(base64String) {
     }
 }
 
-// Function to process the parsed CSV data
 function processCSVData(data) {
-    const supermodules = {}; // Dictionary to store all data grouped by Superheading > Heading > Sub-Heading > Resource Links
+    const supermodules = {};
     let lastSuperheading = null;
     let lastHeading = null;
     let lastSubheading = null;
@@ -22,7 +19,7 @@ function processCSVData(data) {
         const heading = row['Heading'] ? row['Heading'].trim() : '';
         const subheading = row['Sub-Heading'] ? row['Sub-Heading'].trim() : '';
         const resourceLink = row['Resource Links'] ? row['Resource Links'].trim() : '';
-        const resourceURL = row['Actual URL'] ? row['Actual URL'].trim() : '';  // Extract the actual URL column
+        const resourceURL = row['Actual URL'] ? row['Actual URL'].trim() : '';
 
         if (superheading && superheading.length > 0) {
             lastSuperheading = superheading;
@@ -51,13 +48,13 @@ function processCSVData(data) {
 
             let finalURL = resourceURL;
             if (linkIsFile && !isVideo) {
-                finalURL += "?raw=true";  // Add raw=true for files
+                finalURL += "?raw=true";
             }
 
             supermodules[lastSuperheading][lastHeading][lastSubheading].push({
                 linkText: resourceLink,
                 linkURL: finalURL,
-                isFile: !isVideo  // Set this flag to differentiate videos
+                isFile: !isVideo
             });
         }
     });
@@ -65,7 +62,6 @@ function processCSVData(data) {
     generateCourseContent(supermodules);
 }
 
-// Function to dynamically generate the course content after grouping the data
 function generateCourseContent(supermodules) {
     const container = document.getElementById('course-content');
     container.innerHTML = '';
@@ -101,19 +97,17 @@ function generateCourseContent(supermodules) {
     }
 }
 
-// Fetch and load the obfuscated CSV file (obsdata.csv) from the local directory
-fetch('obsdata.csv')
+fetch('obsdata.bin')
     .then(response => response.text())
     .then(obfuscatedText => {
-        const decodedText = decodeCSV(obfuscatedText);  // Decode the base64-encoded CSV file
+        const decodedText = decodeCSV(obfuscatedText);
 
         if (decodedText) {
-            // Parse the CSV using PapaParse after decoding
             Papa.parse(decodedText, {
                 header: true,
-                skipEmptyLines: true, // Skip empty rows
+                skipEmptyLines: true,
                 complete: function(results) {
-                    processCSVData(results.data); // Process the decoded and parsed data
+                    processCSVData(results.data);
                 }
             });
         }
