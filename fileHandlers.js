@@ -1,46 +1,15 @@
 
 
 
-/*
-// Function to display a YouTube video in a modal using MediaElement.js
-function showVideoModal(videoUrl) {
-    const modal = document.getElementById('videoModal');
 
-    // Initialize MediaElement.js with YouTube
-    const player = new MediaElementPlayer('videoPlayer', {
-        stretching: 'responsive',  // Make the player responsive
-        success: function(mediaElement, originalNode) {
-            mediaElement.setSrc(videoUrl);
-            mediaElement.load();
-            mediaElement.play(); // Auto play the video when modal is opened
-        }
-    });
 
-    // Disable right-click across the entire modal
-    modal.oncontextmenu = function() {
-        return false; // Prevent right-click menu for the entire modal
-    };
-
-    // Show the modal
-    modal.style.display = "block";
-}
-
-// Function to close the YouTube video modal and stop playback
-function closeVideoModal() {
-    const modal = document.getElementById('videoModal');
-    const videoPlayer = document.getElementById('videoPlayer');
-
-    // Hide the modal
-    modal.style.display = "none";
-
-    // Stop the video
-    const player = new MediaElementPlayer('videoPlayer');
-    player.pause();
-    player.setSrc('');  // Clear the video source
-}
-*/
 
 let player;
+
+function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+
 
 // Function to display a YouTube video in a modal using MediaElement.js
 function showVideoModal(videoUrl) {
@@ -96,6 +65,7 @@ function showVideoModal(videoUrl) {
     player.load();
 	//player.play();
 	
+	/*
 	// Add a 2-second delay before entering fullscreen and playing the video
 		setTimeout(function() {
 			if (player.enterFullScreen) {
@@ -103,6 +73,22 @@ function showVideoModal(videoUrl) {
 			player.play();
         } 
 		}, 2000);  // 2000 milliseconds = 2 seconds
+	*/
+	
+	 setTimeout(function() {
+        if (isIOS()) {
+            // On iOS devices, use webkitEnterFullscreen
+            const videoElement = document.getElementById('videoPlayer');
+            if (videoElement.webkitEnterFullscreen) {
+                videoElement.webkitEnterFullscreen();
+            }
+        } else {
+            if (player.enterFullScreen) {
+                player.enterFullScreen(); // Use MediaElement.js's built-in fullscreen method
+            }
+        }
+        player.play();
+    }, 2000);  // 2000 milliseconds = 2 seconds
 	
 
     // Disable right-click across the entire modal
