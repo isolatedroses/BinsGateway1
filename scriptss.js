@@ -1,214 +1,184 @@
-// Function to decode base64 encoded CSV content
-function decodeCSV(base64String) {
+
+function obfDecode(b64Str) {
     try {
-        // Decode the base64 string
-        const decodedData = atob(base64String);
-        return decodedData;
-    } catch (error) {
-        console.error('Error decoding CSV:', error);
+        const decData = atob(b64Str);
+        return decData;
+    } catch (err) {
+        console.error('Error'.slice(0, 2) + ' decoding'.slice(1) + ' CSV:'.slice(0, 2), err);
         return null;
     }
 }
 
-// Function to detect the browser type
-function detectBrowser() {
-    const userAgent = navigator.userAgent;
 
-    if (userAgent.indexOf("Firefox") > -1) {
-        return "Firefox";
-    } else if (userAgent.indexOf("Chrome") > -1) {
-        return "Chrome";
-    } else if (userAgent.indexOf("Safari") > -1 && userAgent.indexOf("Chrome") === -1) {
-        return "Safari";
-    } else if (userAgent.indexOf("Edge") > -1) {
-        return "Edge";
+function obfDetectBrowser() {
+    const ua = navigator['user'.slice(0, 4) + 'Agent'.slice(4)];
+
+    if (ua['indexOf'.slice(0, 5)]("Fi".slice(0, 2) + "refox".slice(2)) > -1) {
+        return "Fire" + "fox";
+    } else if (ua.indexOf("C" + "hro".slice(1)) > -1) {
+        return "Ch".slice(0, 2) + "rome".slice(2);
+    } else if (ua.indexOf("S" + "afari") > -1 && ua.indexOf("C".slice(0, 1) + "hro".slice(1)) === -1) {
+        return "Saf" + "ari";
+    } else if (ua.indexOf("E" + "dge") > -1) {
+        return "Ed" + "ge";
     } else {
-        return "Other";
+        return "O" + "ther";
     }
 }
 
-// Function to show or download PDF based on browser
-function handlePDF(url) {
-    const browser = detectBrowser();
 
-    // For browsers that open PDFs inline (e.g., Chrome, Edge), open in new small window
-    if (browser === "Chrome" || browser === "Edge") {
-        // Open in a small popup window
-        const pdfWindow = window.open(url, "_blank", "width=800,height=600");
+function obfHandlePDF(url) {
+    const browser = obfDetectBrowser();
+
+    if (browser === "Ch" + "rome" || browser === "Edge") {
+        const pdfWindow = window['open'.slice(0, 4)](url, "_bl" + "ank", "width=800,height=600".slice(0));
         if (!pdfWindow) {
-            alert('Popup blocker might be enabled. Please allow popups for this site.');
+            alert('Popup'.slice(0, 4) + ' blocker might be enabled.');
         }
-    } else if (browser === "Firefox" || browser === "Safari" || browser === "Other") {
-        // Force download for Firefox, Safari, and other browsers
-        const anchor = document.createElement('a');
-        anchor.href = url;
-        anchor.download = ''; // This forces the download dialog
-        document.body.appendChild(anchor);
-        anchor.click(); // Trigger click event
-        document.body.removeChild(anchor); // Remove anchor after download
+    } else if (browser === "Fir" + "efox" || browser === "Saf" + "ari" || browser === "Oth" + "er") {
+        const a = document['create' + 'Element']('a');
+        a.href = url;
+        a['down' + 'load'] = '';
+        document.body['appendChild'](a);
+        a.click();
+        document.body['remove' + 'Child'](a);
     }
 }
 
-// Function to handle file downloads or open the PDF in a new window
-function downloadFile(url, isFile) {
+
+function obfDownloadFile(url, isFile) {
     if (isFile) {
-        // Check if the file is a PDF; if so, handle it based on browser type
-        if (url.toLowerCase().endsWith('.pdf')) {
-            handlePDF(url);
+        if (url.toLowerCase().endsWith('.pd' + 'f')) {
+            obfHandlePDF(url);
         } else {
-            // For non-PDF files (ZIP, etc.), trigger download
-            const anchor = document.createElement('a');
-            anchor.href = url;
-            anchor.download = ''; // Force download dialog
-            document.body.appendChild(anchor);
-            anchor.click(); // Trigger click event
-            document.body.removeChild(anchor); // Remove anchor after download
+            const a = document.createElement('a');
+            a.href = url;
+            a['download'] = '';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
     } else {
-        // For YouTube videos, open in modal (handle separately)
         showModal(url);
     }
 }
 
 // Function to show the video in a modal
-function showModal(videoUrl) {
-    const modal = document.getElementById('videoModal');
-    const videoElement = document.getElementById('modalVideo');
-
-    videoElement.src = videoUrl;  // Set the video source
-    modal.style.display = "block";  // Show the modal
+function obfShowModal(videoUrl) {
+    const modal = document['getElem'.slice(0, 7) + 'entById']('video' + 'Modal');
+    const vidElement = document['getElem' + 'entById']('modal' + 'Video');
+    vidElement['src'.slice(0, 3)] = videoUrl;
+    modal.style['display'] = "bl" + "ock";
 }
 
 // Function to close the video modal
-function closeModal() {
-    const modal = document.getElementById('videoModal');
-    const videoElement = document.getElementById('modalVideo');
-
-    videoElement.src = '';  // Remove the video source
-    modal.style.display = "none";  // Hide the modal
+function obfCloseModal() {
+    const modal = document['getElem'.slice(0, 7) + 'entById']('video' + 'Modal');
+    const vidElement = document['getElem' + 'entById']('modal' + 'Video');
+    vidElement.src = '';
+    modal.style['display'] = "none";
 }
 
-// Fetch and load the obfuscated CSV file (obsdata.csv) from the local directory
-fetch('obsdata.csv')
-    .then(response => response.text())
-    .then(obfuscatedText => {
-        const decodedText = decodeCSV(obfuscatedText);  // Decode the base64-encoded CSV file
 
-        if (decodedText) {
-            // Parse the CSV using PapaParse after decoding
-            Papa.parse(decodedText, {
+fetch('obs'.slice(0, 3) + 'data.csv'.slice(3))
+    .then(response => response['text']())
+    .then(obfText => {
+        const decText = obfDecode(obfText);
+        if (decText) {
+            Papa.parse(decText, {
                 header: true,
-                skipEmptyLines: true, // Skip empty rows
+                skipEmptyLines: true,
                 complete: function(results) {
-                    processCSVData(results.data); // Process the decoded and parsed data
+                    processCSVData(results.data);
                 }
             });
         }
     })
-    .catch(error => {
-        console.error('Error loading the obfuscated CSV file:', error);
+    .catch(err => {
+        console.error('Error loading the obsdata file'.slice(0, 28) + ':', err);
     });
 
-// Function to decode base64 encoded CSV content
-function decodeCSV(base64String) {
-    try {
-        // Decode the base64 string
-        const decodedData = atob(base64String);
-        return decodedData;
-    } catch (error) {
-        console.error('Error decoding CSV:', error);
-        return null;
-    }
-}
 
-// Function to process the parsed CSV data
-function processCSVData(data) {
-    const supermodules = {}; // Dictionary to store all data grouped by Superheading > Heading > Sub-Heading > Resource Links
-    let lastSuperheading = null;
-    let lastHeading = null;
-    let lastSubheading = null;
+function obfProcessCSV(data) {
+    const modules = {};
+    let lastSuper = null;
+    let lastHead = null;
+    let lastSub = null;
 
     data.forEach(function(row) {
-        const superheading = row['Superheading'] ? row['Superheading'].trim() : '';
-        const heading = row['Heading'] ? row['Heading'].trim() : '';
-        const subheading = row['Sub-Heading'] ? row['Sub-Heading'].trim() : '';
-        const resourceLink = row['Resource Links'] ? row['Resource Links'].trim() : '';
-        const resourceURL = row['Actual URL'] ? row['Actual URL'].trim() : '';  // Extract the actual URL column
+        const superhead = row['Super'.slice(0, 5) + 'heading'.slice(5)] ? row['Superheading'.slice(0, 6)].trim() : '';
+        const head = row['Hea' + 'ding'] ? row['Head' + 'ing'].trim() : '';
+        const subhead = row['Sub-'.slice(0, 4) + 'Heading'.slice(4)] ? row['Sub-' + 'Heading'].trim() : '';
+        const resLink = row['Resource'.slice(0, 8) + ' Links'.slice(8)] ? row['Resou' + 'rce Links'].trim() : '';
+        const resURL = row['Actual'.slice(0, 6) + ' URL'] ? row['Actual'.slice(0, 6) + ' URL'].trim() : '';
 
-        if (superheading && superheading.length > 0) {
-            lastSuperheading = superheading;
-            if (!supermodules[lastSuperheading]) {
-                supermodules[lastSuperheading] = {};
+        if (superhead && superhead.length > 0) {
+            lastSuper = superhead;
+            if (!modules[lastSuper]) {
+                modules[lastSuper] = {};
             }
         }
 
-        if (heading && heading.length > 0 && lastSuperheading) {
-            lastHeading = heading;
-            if (!supermodules[lastSuperheading][lastHeading]) {
-                supermodules[lastSuperheading][lastHeading] = {};
+        if (head && head.length > 0 && lastSuper) {
+            lastHead = head;
+            if (!modules[lastSuper][lastHead]) {
+                modules[lastSuper][lastHead] = {};
             }
         }
 
-        if (subheading && subheading.length > 0 && lastSuperheading && lastHeading) {
-            lastSubheading = subheading;
-            if (!supermodules[lastSuperheading][lastHeading][lastSubheading]) {
-                supermodules[lastSuperheading][lastHeading][lastSubheading] = [];
+        if (subhead && subhead.length > 0 && lastSuper && lastHead) {
+            lastSub = subhead;
+            if (!modules[lastSuper][lastHead][lastSub]) {
+                modules[lastSuper][lastHead][lastSub] = [];
             }
         }
 
-        if (resourceLink && resourceURL && lastSuperheading && lastHeading && lastSubheading) {
-            const linkIsFile = resourceLink.toLowerCase().endsWith("file");
-            const isVideo = resourceURL.includes("youtube");
+        if (resLink && resURL && lastSuper && lastHead && lastSub) {
+            const isFile = resLink.toLowerCase().endsWith("fi" + "le");
+            const isVideo = resURL.includes("you" + "tube");
 
-            let finalURL = resourceURL;
-            if (linkIsFile && !isVideo) {
-                finalURL += "?raw=true";  // Add raw=true for files
+            let finalURL = resURL;
+            if (isFile && !isVideo) {
+                finalURL += "?r" + "aw=true";
             }
 
-            supermodules[lastSuperheading][lastHeading][lastSubheading].push({
-                linkText: resourceLink,
+            modules[lastSuper][lastHead][lastSub].push({
+                linkText: resLink,
                 linkURL: finalURL,
-                isFile: !isVideo  // Set this flag to differentiate videos
+                isFile: !isVideo
             });
         }
     });
 
-    generateCourseContent(supermodules);
+    generateCourseContent(modules);
 }
 
-// Function to dynamically generate the course content after grouping the data
-function generateCourseContent(supermodules) {
-    const container = document.getElementById('course-content');
+
+function generateCourseContent(modules) {
+    const container = document['getEle'.slice(0, 6) + 'mentById']('course'.slice(0, 6) + '-content'.slice(6));
     container.innerHTML = '';
 
-    for (const superheading in supermodules) {
-        if (supermodules.hasOwnProperty(superheading)) {
-            let superheadingHTML = `<details><summary>${superheading}</summary>`;
-
-            for (const heading in supermodules[superheading]) {
-                if (supermodules[superheading].hasOwnProperty(heading)) {
-                    superheadingHTML += `<details><summary>${heading}</summary>`;
-
-                    for (const subheading in supermodules[superheading][heading]) {
-                        if (supermodules[superheading][heading].hasOwnProperty(subheading)) {
-                            superheadingHTML += `<details class="sub-heading"><summary>${subheading}</summary><ul>`;
-
-                            supermodules[superheading][heading][subheading].forEach(resource => {
+    for (const superhead in modules) {
+        if (modules.hasOwnProperty(superhead)) {
+            let superHTML = `<details><summary>${superhead}</summary>`;
+            for (const head in modules[superhead]) {
+                if (modules[superhead].hasOwnProperty(head)) {
+                    superHTML += `<details><summary>${head}</summary>`;
+                    for (const subhead in modules[superhead][head]) {
+                        if (modules[superhead][head].hasOwnProperty(subhead)) {
+                            superHTML += `<details class="sub-heading"><summary>${subhead}</summary><ul>`;
+                            modules[superhead][head][subhead].forEach(resource => {
                                 const downloadHandler = `downloadFile('${resource.linkURL}', ${resource.isFile})`;
-                                superheadingHTML += `<li><a href="javascript:void(0);" onclick="${downloadHandler}">${resource.linkText}</a></li>`;
+                                superHTML += `<li><a href="javascript:void(0);" onclick="${downloadHandler}">${resource.linkText}</a></li>`;
                             });
-
-                            superheadingHTML += `</ul></details>`;
+                            superHTML += `</ul></details>`;
                         }
                     }
-
-                    superheadingHTML += `</details>`;
+                    superHTML += `</details>`;
                 }
             }
-
-            superheadingHTML += `</details>`;
-            container.innerHTML += superheadingHTML;
+            superHTML += `</details>`;
+            container.innerHTML += superHTML;
         }
     }
 }
-
