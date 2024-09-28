@@ -5,6 +5,7 @@
 
 
 let player;
+let spinnerTimeout;
 
 function isIOS() {
     return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -155,10 +156,53 @@ function closeVideoModal() {
 
 
 
+
+
+
+
+
+// Function to show the loading spinner and "Downloading" text
+function showSpinner() {
+    const spinner = document.getElementById('spinner');
+    const spinnerText = document.getElementById('spinner-text');
+    
+    // Show spinner and text
+    spinner.style.display = 'block';
+    spinnerText.style.display = 'block';
+    
+    // Set a maximum timeout of 5 seconds to hide the spinner if the process freezes
+    spinnerTimeout = setTimeout(function() {
+        hideSpinner();
+    }, 5000);  // 5000 milliseconds = 5 seconds
+}
+
+// Function to hide the loading spinner and "Downloading" text
+function hideSpinner() {
+    const spinner = document.getElementById('spinner');
+    const spinnerText = document.getElementById('spinner-text');
+    
+    // Hide spinner and text
+    spinner.style.display = 'none';
+    spinnerText.style.display = 'none';
+    
+    // Clear the timeout to avoid the spinner getting stuck
+    clearTimeout(spinnerTimeout);
+}
+	
+
 // Function to show the PDF (appends ?raw=true for GitHub URLs)
 function showPdfModal(pdfUrl) {
     const pdfViewer = document.getElementById('pdfViewer');
+	  // Show spinner while PDF is loading
+    showSpinner();
+	
     pdfViewer.src = pdfUrl + '?raw=true'; // Append ?raw=true for GitHub URLs
+	
+	pdfViewer.onload = function() {
+        hideSpinner();
+    };
+	// Hide the spinner after a 2-second delay or when download starts
+            setTimeout(hideSpinner, 5000); // Hide spinner after 2 seconds
 }
 
 // Function to handle file downloads or open the PDF in the modal
@@ -195,7 +239,7 @@ function downloadFile(url, isFile) {
 	
 
 
-	
+
 	
 }
 

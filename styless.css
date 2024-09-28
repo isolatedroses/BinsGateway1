@@ -170,3 +170,43 @@ a:hover {
     display: none !important;
 }
 */
+
+/* Spinner styling */
+#spinner {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 9999;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    margin-left: -20px;
+    border: 6px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #3498db; /* Blue color */
+    animation: spin 1s linear infinite;
+}
+
+/* Text that shows while loading */
+#spinner-text {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 9999;
+    top: calc(50% + 50px); /* 50px below the spinner */
+    left: 50%;
+    transform: translateX(-50%);
+    color: #333;
+    font-size: 18px;
+    font-family: Arial, sans-serif;
+}
+
+/* Spinner animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
