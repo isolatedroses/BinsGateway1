@@ -103,7 +103,7 @@ fetch('obsdata.bin')
         const decodedText = decodeCSV(obfuscatedText);
 			
 			if (!window.location.hostname.includes("roses")) {
-				//return false; // Access is denied
+				return false; 
 			}
 			
 
