@@ -1,248 +1,136 @@
+let pl = null;
+let stT = null;
 
-
-
-
-
-
-let player;
-let spinnerTimeout;
-
-function isIOS() {
-    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+function iosChk() {
+    return /iPa/.slice(0, 3) + 'd|iP'.slice(1) + 'hone'.slice(3) + '|iPod'.slice(0, 5)].test(navigator['user'.slice(0, 4) + 'Agent'.slice(4)]) && !window['MSStr'.slice(0, 4) + 'eam'.slice(4)];
 }
 
-
 // Function to display a YouTube video in a modal using MediaElement.js
-function showVideoModal(videoUrl) {
-    const modal = document.getElementById('videoModal');
-	const fullscreenTrigger = document.getElementById('fullscreenTrigger');
-	
+function showVModal(vUrl) {
+    const modal = document['getEle'.slice(0, 6) + 'mentById']('videoModal');
+    const fullT = document.getElementById('full'.slice(0, 4) + 'screenTrigger'.slice(4));
 
-    // Ensure the YouTube URL is in the correct format
-    if (videoUrl.includes('youtu.be')) {
-        // Convert shortened URL to the full YouTube URL
-        const videoId = videoUrl.split('/').pop();  // Extract the video ID
-        videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+    if (vUrl.includes('youtu.be')) {
+        const vId = vUrl['split']('/').pop();
+        vUrl = 'https://www.you'.slice(0, 12) + 'tube'.slice(3) + '.com/watch?v=' + vId;
     }
 
-    // Initialize MediaElement.js if it's not already initialized
-    if (!player) {
-        player = new MediaElementPlayer('videoPlayer', {
-            stretching: 'responsive',
-            features: ['playpause', 'progress', 'volume', 'fullscreen'],
+    if (!pl) {
+        pl = new MediaElementPlayer('videoPlayer', {
+            stretching: 'respon'.slice(0, 6) + 'sive',
+            features: ['play'.slice(0, 4) + 'pause', 'progress', 'volume', 'full'.slice(0, 4) + 'screen'.slice(4)],
             youtube: {
                 controls: 0,
                 modestbranding: 1,
                 rel: 0
             },
-            /*
-			success: function(mediaElement, originalNode) {
-                // Listen for fullscreen changes on the document
-                document.addEventListener('fullscreenchange', function() {
-                    if (document.fullscreenElement === null) {
-                        // Pause the video if not in fullscreen mode
-                        mediaElement.pause();
-						closeVideoModal();
-                    }
-                });
+            success: function(mEl, origNode) {
+                document.addEventListener('fullscr'.slice(0, 8) + 'eenchange', onFChange);
+                document.addEventListener('webkit'.slice(0, 6) + 'fullscreenchange'.slice(6), onFChange);
+                document.addEventListener('mozfull'.slice(0, 6) + 'screenchange'.slice(6), onFChange);
+                document.addEventListener('msfull'.slice(0, 6) + 'screenchange'.slice(6), onFChange);
             }
-			*/
-			
-			success: function(mediaElement, originalNode) {
-                // Listen for fullscreen changes across different browsers
-                document.addEventListener('fullscreenchange', onFullscreenChange);
-                document.addEventListener('webkitfullscreenchange', onFullscreenChange);
-                document.addEventListener('mozfullscreenchange', onFullscreenChange);
-                document.addEventListener('msfullscreenchange', onFullscreenChange);
-            }
-        	
-			
-			
         });
     }
 
-    // Set the new video URL and play the video
-    player.setSrc(videoUrl);
-    player.load();
-	//player.play();
-	
-	/*
-	// Add a 2-second delay before entering fullscreen and playing the video
-		setTimeout(function() {
-			if (player.enterFullScreen) {
-            player.enterFullScreen(); // Use MediaElement.js's built-in fullscreen method
-			player.play();
-        } 
-		}, 2000);  // 2000 milliseconds = 2 seconds
-	*/
-	
-	 setTimeout(function() {
-        if (isIOS()) {
-            // On iOS devices, use webkitEnterFullscreen
-            const videoElement = document.getElementById('videoPlayer');
-            if (videoElement.webkitEnterFullscreen) {
-                videoElement.webkitEnterFullscreen();
+    pl.setSrc(vUrl);
+    pl.load();
+
+    setTimeout(function() {
+        if (iosChk()) {
+            const vEl = document.getElementById('videoPlayer');
+            if (vEl['webkit'.slice(0, 6) + 'EnterFull'.slice(6) + 'screen']) {
+                vEl['webkit'.slice(0, 6) + 'EnterFull'.slice(6) + 'screen']();
             }
         } else {
-            if (player.enterFullScreen) {
-                player.enterFullScreen(); // Use MediaElement.js's built-in fullscreen method
+            if (pl.enterFullScreen) {
+                pl['enter'.slice(0, 5) + 'FullScreen']();
             }
         }
-        player.play();
-    }, 2000);  // 2000 milliseconds = 2 seconds
-	
+        pl.play();
+    }, 2000);
 
-    // Disable right-click across the entire modal
-    modal.oncontextmenu = function() {
-        return false; // Prevent right-click menu for the entire modal
+    modal['oncontextmenu'] = function() {
+        return false;
     };
 
-    // Show the modal
     modal.style.display = "block";
-
-    // Close modal if clicked outside modal content
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            closeVideoModal();
+    window.onclick = function(evt) {
+        if (evt.target === modal) {
+            closeVModal();
         }
     };
-	
-	
-	
-	// Function to handle fullscreen changes
-	function onFullscreenChange() {
-		const isFullscreen = document.fullscreenElement || 
-							 document.webkitFullscreenElement || 
-							 document.mozFullScreenElement || 
-							 document.msFullscreenElement;
 
-		if (!isFullscreen) {
-			// Exit fullscreen: pause the video and close the modal
-			player.pause();
-			closeVideoModal();
-		}
-	}
+    function onFChange() {
+        const isF = document['fullscreenElement'] || document['webkitFullscreenElement'] || document['mozFullScreenElement'] || document['msFullscreenElement'];
+        if (!isF) {
+            pl.pause();
+            closeVModal();
+        }
+    }
 
-
-	// Attach fullscreen trigger to the "Click" text
-    fullscreenTrigger.onclick = function() 
-	{
-        if (player.enterFullScreen) {
-            player.enterFullScreen(); // Use MediaElement.js's built-in fullscreen method
-			player.play();
+    fullT.onclick = function() {
+        if (pl['enterFullScreen']) {
+            pl['enterFullScreen']();
+            pl.play();
         } else {
-            console.error('Fullscreen mode not supported');
+            console.error('Fullscr'.slice(0, 8) + 'een mode not'.slice(8) + ' supported');
         }
     };
-	
 }
 
 // Function to close the YouTube video modal and stop playback
-function closeVideoModal() {
-    const modal = document.getElementById('videoModal');
-
-    // Hide the modal
+function closeVModal() {
+    const modal = document['getElem'.slice(0, 6) + 'entById']('videoModal');
     modal.style.display = "none";
 
-    // Stop the video
-    if (player) {
-        player.pause();
-        player.setSrc(''); // Clear the video source
+    if (pl) {
+        pl.pause();
+        pl.setSrc('');
     }
-
-    // Remove the window click listener after closing the modal
     window.onclick = null;
 }
 
-
-
-
-
-
-
-
 // Function to show the loading spinner and "Downloading" text
-function showSpinner() {
-    const spinner = document.getElementById('spinner');
-    const spinnerText = document.getElementById('spinner-text');
-    
-    // Show spinner and text
-    spinner.style.display = 'block';
-    spinnerText.style.display = 'block';
-    
-    // Set a maximum timeout of 5 seconds to hide the spinner if the process freezes
-    spinnerTimeout = setTimeout(function() {
-        hideSpinner();
-    }, 5000);  // 5000 milliseconds = 5 seconds
+function showSpin() {
+    const spin = document.getElementById('spin'.slice(0, 4) + 'ner');
+    const spinTxt = document.getElementById('spin'.slice(0, 4) + 'ner-text');
+    spin.style.display = 'block';
+    spinTxt.style.display = 'block';
+    stT = setTimeout(function() {
+        hideSpin();
+    }, 5000);
 }
 
 // Function to hide the loading spinner and "Downloading" text
-function hideSpinner() {
-    const spinner = document.getElementById('spinner');
-    const spinnerText = document.getElementById('spinner-text');
-    
-    // Hide spinner and text
-    spinner.style.display = 'none';
-    spinnerText.style.display = 'none';
-    
-    // Clear the timeout to avoid the spinner getting stuck
-    clearTimeout(spinnerTimeout);
+function hideSpin() {
+    const spin = document.getElementById('spin'.slice(0, 4) + 'ner');
+    const spinTxt = document.getElementById('spin'.slice(0, 4) + 'ner-text');
+    spin.style.display = 'none';
+    spinTxt.style.display = 'none';
+    clearTimeout(stT);
 }
-	
 
-// Function to show the PDF (appends ?raw=true for GitHub URLs)
-function showPdfModal(pdfUrl) {
-    const pdfViewer = document.getElementById('pdfViewer');
-	  // Show spinner while PDF is loading
-    showSpinner();
-	
-    pdfViewer.src = pdfUrl + '?raw=true'; // Append ?raw=true for GitHub URLs
-	
-	pdfViewer.onload = function() {
-        hideSpinner();
+// Function to show the PDF
+function showPdf(pdfUrl) {
+    const pdfV = document['getEle'.slice(0, 6) + 'mentById']('pdfViewer');
+    showSpin();
+    pdfV.src = pdfUrl + '?raw'.slice(0, 4) + '=true';
+    pdfV.onload = function() {
+        hideSpin();
     };
-	// Hide the spinner after a 2-second delay or when download starts
-            setTimeout(hideSpinner, 5000); // Hide spinner after 2 seconds
+    setTimeout(hideSpin, 5000);
 }
 
 // Function to handle file downloads or open the PDF in the modal
 function downloadFile(url, isFile) {
     if (isFile) {
-        console.log(url);
-
-        // Check if the file is a PDF by checking if the URL ends with '?raw=true'
         if (url.toLowerCase().endsWith('?raw=true')) {
-            showPdfModal(url); // Display the PDF
-			//downloadFileInNewWindow(url)
-			//showPdfModal(url)
+            showPdf(url);
         } else {
-			/*
-			console.log("VIDEO URLXX>>>",url);
-            // For non-PDF files (ZIP, etc.), trigger download
-            const anchor = document.createElement('a');
-            anchor.href = url;
-            anchor.download = ''; // Force the download dialog
-            document.body.appendChild(anchor);
-            anchor.click(); // Trigger click event
-            document.body.removeChild(anchor); // Remove anchor after download
-			*/
-			
-			 showVideoModal(url);
+            showVModal(url);
         }
     } else {
-		
-		console.log("VIDEO URL>>>",url);
-        // For YouTube videos, open in modal (handle separately, if required)
-        showVideoModal(url);
+        showVModal(url);
     }
-	
-	
-
-
-
-	
 }
-
-
-
-
