@@ -1,0 +1,172 @@
+/* Body and Text Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    padding: 20px;
+}
+
+h5 {
+    text-align: center;
+    color: #555;
+}
+
+details {
+    background-color: #fff;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+details summary {
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.sub-heading {
+    font-size: 16px;
+    color: #007BFF;
+    margin-left: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 40px;
+}
+
+ul li {
+    margin: 5px 0;
+}
+
+a {
+    color: #ff5722;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+	width: 100%;
+    height: 1000%;
+    overflow: hidden; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.2); /* Black background with opacity */
+	/*display: flex;*/
+	
+	justify-content: center;
+    align-items: center;
+ /* Padding used to center the content */
+    padding-top: 25%; /* Push the modal content down */
+    padding-left: 45%; /* Adjust this based on the size of the modal content */
+    box-sizing: border-box; /* Ensure padding is counted in the overall width */
+}
+
+
+
+	
+
+.modal-content {
+    position: relative;
+    width: 170px; /* Set the size of the cropped area */
+    height: 130px; /* Set the size of the cropped area */
+    background-color: #00;
+    border-radius: 10px;
+    overflow: hidden; /* Crop the overflowing part of the video */
+    display: flex;
+	justify-content: center;
+    align-items: center;
+}
+
+/* Video Cropper */
+.video-cropper {
+    position: relative;
+    width: 1000px; /* This is the actual width of the video */
+    height: 1000px; /* This is the actual height of the video */
+    
+    transform: translate(-235px, 20px);*/ /* Move the video to show the right-bottom corner */
+}
+
+.modal-overlay-text {
+	text-align: center; /* Horizontally center the text */
+    position: absolute; /* Absolute positioning for centering */
+    
+	top: 0px; 
+    left: 0px;
+    width: 100px; /* This is the actual width of the video */
+    height: 80px; /* This is the actual height of the video */
+    
+	
+	font-size: 16px;
+    color: #fff; /* Text color */
+    z-index: 1001; /* Ensure it appears above the modal content */
+    /*background-color: rgba(255, 0, 0, 0.8);*/ /* Optional: Add a background to make text stand out */
+	background: linear-gradient(45deg, #ff9900, #ff6600, #cc5200);
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Add a subtle shadow for depth */
+    padding: 10px 10px 10px 10px; /* Add some padding around the text */
+    border-radius: 10px; /* Optional: Rounded corners */
+}
+
+/* Close Button Styling */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+/* MediaElement Video Player */
+.mejs__container {
+    width: 100% !important;
+    height: 50% !important;
+}
+
+/* Ensure controls remain visible in fullscreen mode */
+.mejs__container.fullscreen .mejs__controls {
+    opacity: 1 !important; /* Ensure the controls are fully visible */
+    transition: none !important; /* Remove any transition effect that might cause auto-hide */
+}
+
+/* Video Player Specific to Modal */
+#videoPlayer {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ensure the video fits well */
+    pointer-events: all; /* Make sure the video is clickable */
+}
+
+
+/* Ensure PDF viewer iframe fits properly */
+#pdfViewer {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+/*
+.mejs__controls > *:not(.mejs__fullscreen-button) {
+    display: none !important;
+}
+*/

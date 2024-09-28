@@ -5,180 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIML Course Modules (2022-2024)</title>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script> <!-- PapaParse for CSV parsing -->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        h1 {
-            text-align: center;
-            padding: 20px;
-        }
-        details {
-            background-color: #fff;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-        }
-        details summary {
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .sub-heading {
-            font-size: 16px;
-            color: #007BFF; /* Blue color for sub-headings */
-            margin-left: 20px;
-        }
-        ul {
-            list-style-type: none;
-            padding-left: 40px;
-        }
-        ul li {
-            margin: 5px 0;
-        }
-        a {
-            color: #ff5722; /* Orange color for links */
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        #course-content {
-            margin: 20px;
-        }
-    </style>
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="styless.css">
+
+    <!-- Load PapaParse for CSV parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <!-- Include MediaElement.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelementplayer.min.css" />
+
+    <!-- Include MediaElement.js JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/mediaelement@4.2.16/build/mediaelement-and-player.min.js"></script>
+
+    <!-- Link to Part 1 (Data Processing Script) -->
+    <script src="dataProcessor.js"></script>
 </head>
 <body>
 
+    <h1>BINS' WILP AIML Course Modules (2022-2024): V2.1</h1>
+    <h5>(There are a lot of things to write, but let's keep it simple <img src="https://html-online.com/editorfiles/tiny/plugins/emoticons/img/smiley-cool.gif" alt="cool" />)</h5>
+    <h1>Semesters:</h1>
 
-<h1>BINS' WILP AIML Course Modules (2022-2024): V2.0</h1>
-<h5>(There are a lot of things to write, but let's keep it simple <img src="https://html-online.com/editorfiles/tiny/plugins/emoticons/img/smiley-cool.gif" alt="cool" />)</h5>
-<h1>Semesters:</h1>
+    <div id="course-content">
+        <!-- Dynamic content will be added here -->
+    </div>
 
-<div id="course-content">
-    <!-- Dynamic content will be added here -->
-</div>
+    <!-- PDF Viewer (Will load the PDF directly into this iframe) -->
+    <div id="pdfModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePdfModal()">&times;</span>
+            <iframe id="pdfViewer" width="100%" height="600px" frameborder="0"></iframe>
+        </div>
+    </div>
 
-<script>
-    // Fetch and load the CSV file from the local directory
-    fetch('data.csv')
-        .then(response => response.text())
-        .then(text => {
-            // Parse the CSV file using PapaParse
-            Papa.parse(text, {
-                header: true,
-                skipEmptyLines: true, // Skip empty rows
-                complete: function(results) {
-                    processCSVData(results.data);
-                }
-            });
-        })
-        .catch(error => {
-            console.error('Error loading the CSV file:', error);
-        });
+	<!-- Video Modal using MediaElement.js -->
+	<div id="videoModal" class="modal">
+		<!-- Small text over the modal -->
+		<!-- Modal Content with Cropped Video -->
+		<div id="videoModalContent" class="modal-content">
+			<p class="modal-overlay-text" id="fullscreenTrigger"> Wait to <br> OPEN <br> and <br> PLAY </p>
+			<span class="close" onclick="closeVideoModal()">&times;</span> <!-- Close button inside modal -->
 
-    function processCSVData(data) {
-        const supermodules = {}; // Dictionary to store all data grouped by Superheading > Heading > Sub-Heading > Resource Links
-        let lastSuperheading = null;
-        let lastHeading = null;
-        let lastSubheading = null;
-
-        // Iterate through the rows and group them by Superheading, Heading, Sub-Heading, and Resource Links
-        data.forEach(function(row, index) {
-            const superheading = row['Superheading'] ? row['Superheading'].trim() : '';
-            const heading = row['Heading'] ? row['Heading'].trim() : '';
-            const subheading = row['Sub-Heading'] ? row['Sub-Heading'].trim() : '';
-            const resourceLink = row['Resource Links'] ? row['Resource Links'].trim() : '';
-            const resourceURL = row['Actual URL'] ? row['Actual URL'].trim() : '';  // Extract the actual URL column
-            const info = row['Info'] ? row['Info'].trim() : ''; // Ignore this field (we don't display it)
-
-            // Check if we have a new Superheading
-            if (superheading && superheading.length > 0) {
-                lastSuperheading = superheading; // Store the current superheading
-                if (!supermodules[lastSuperheading]) {
-                    supermodules[lastSuperheading] = {}; // Initialize the superheading
-                }
-            }
-
-            // Check if we have a new heading under the current superheading
-            if (heading && heading.length > 0 && lastSuperheading) {
-                lastHeading = heading; // Store the current heading
-                if (!supermodules[lastSuperheading][lastHeading]) {
-                    supermodules[lastSuperheading][lastHeading] = {}; // Initialize the heading
-                }
-            }
-
-            // Check if we have a new subheading under the current heading
-            if (subheading && subheading.length > 0 && lastSuperheading && lastHeading) {
-                lastSubheading = subheading; // Store the current subheading
-                if (!supermodules[lastSuperheading][lastHeading][lastSubheading]) {
-                    supermodules[lastSuperheading][lastHeading][lastSubheading] = []; // Initialize the subheading
-                }
-            }
-
-            // Add the resource link and URL under the correct subheading, heading, and superheading
-            if (resourceLink && resourceURL && lastSuperheading && lastHeading && lastSubheading) {
-                // Check if the resource link ends with 'pdf'
-                const linkIsFILE = resourceLink.toLowerCase().endsWith("file");
-
-                // If it's a FILE, append '?raw=true' to the URL
-                const finalURL = linkIsFILE ? resourceURL + "?raw=true" : resourceURL;
-
-                supermodules[lastSuperheading][lastHeading][lastSubheading].push({
-                    linkText: resourceLink,
-                    linkURL: finalURL
-                });
-            }
-        });
-
-        // After collecting all data, render it in the UI
-        generateCourseContent(supermodules);
-    }
-
-    // Function to dynamically generate the course content after grouping the data
-    function generateCourseContent(supermodules) {
-        const container = document.getElementById('course-content');
-        container.innerHTML = ''; // Clear any existing content
-
-        // Iterate over each Superheading in the supermodules
-        for (const superheading in supermodules) {
-            if (supermodules.hasOwnProperty(superheading)) {
-                // Create a new details section for each Superheading
-                let superheadingHTML = `<details><summary>${superheading}</summary>`;
-
-                // Iterate over each Heading under the Superheading
-                for (const heading in supermodules[superheading]) {
-                    if (supermodules[superheading].hasOwnProperty(heading)) {
-                        superheadingHTML += `<details><summary>${heading}</summary>`;
-
-                        // Iterate over each Sub-Heading under the Heading
-                        for (const subheading in supermodules[superheading][heading]) {
-                            if (supermodules[superheading][heading].hasOwnProperty(subheading)) {
-                                superheadingHTML += `<details class="sub-heading"><summary>${subheading}</summary><ul>`;
-
-                                // Iterate over each Resource Link and its URL under the Sub-Heading
-                                supermodules[superheading][heading][subheading].forEach(resource => {
-                                    superheadingHTML += `<li><a href="${resource.linkURL}" target="_blank">${resource.linkText}</a></li>`;
-                                });
-
-                                superheadingHTML += `</ul></details>`; // Close the subheading's details
-                            }
-                        }
-
-                        superheadingHTML += `</details>`; // Close the heading's details
-                    }
-                }
-
-                superheadingHTML += `</details>`; // Close the superheading's details
-                container.innerHTML += superheadingHTML; // Add the generated HTML to the container
-            }
-        }
-    }
-</script>
-
+			<!-- Wrapper for cropping the video -->
+			<div class="video-cropper">
+				<video id="videoPlayer" width="100%" height="100%" controls>
+					 <source src="" type="video/youtube" />
+				</video>
+			</div>
+		</div>
+	</div>
+	
+    <!-- Link to Part 2 (File Handling Script) -->
+    <script src="fileHandlers.js"></script>
 </body>
 </html>
