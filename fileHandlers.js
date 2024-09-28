@@ -102,7 +102,7 @@ function showVideoModal(videoUrl) {
             player.enterFullScreen(); // Use MediaElement.js's built-in fullscreen method
 			player.play();
         } 
-		}, 1000);  // 2000 milliseconds = 2 seconds
+		}, 2000);  // 2000 milliseconds = 2 seconds
 	
 
     // Disable right-click across the entire modal
